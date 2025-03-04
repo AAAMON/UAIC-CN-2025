@@ -1,7 +1,9 @@
+// Task: search for the smallest number, before rounding errors make the sum insignificant/pointless.
+
 #include <iostream>
 
 
-void update_u(float& u)
+void update_u(float& u) // u is of form: 10^(-m)
 {
 	u = u/10.0;
 }
@@ -9,8 +11,6 @@ void update_u(float& u)
 
 int main ()
 {
-	std::cout << "Hello World\n";
-
 	int m = 0;
 	float prev_u = -1;
 	float u = 1;
@@ -21,11 +21,12 @@ int main ()
 		++m;
 		prev_u = u;
 		update_u(u);
-		std::cout << "u is: " << u << '\n';
+		std::cout << "u este: " << u << '\n';
 	}
 
 	std::cout << "Precizia masina e: " << prev_u << '\n';
-	// resulting u is 1.4013e-45
+	// Andy: resulting u is 1.4013e-45
+	// Ama: u = 1e-07
 
 	return 0;
 }
