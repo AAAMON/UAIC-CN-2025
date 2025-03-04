@@ -16,12 +16,14 @@ int main ()
     // (x + y) + z = 1
     // x + (y + z) > 1
 
-    double a = 1e15;
+    double a = 1e15; // the opposite of b
     double b = 1e-15; // same value as u, because of c
     // a * b = 1 (aprox.)
-    double c = 1 + u; // should be = 1
+    double c = 1 + u; // should be != 1
 
     std::cout << "Relatia (a * b) * c != a * (b * c) este evaluata ca: " << ((a * b) * c != a * (b * c)) << '\n';
+    // (a * b) * c = c
+    // a * (b * c) = a * (u + u^2) = a * b + a * u^2 = 1 + a * u^2 > 1 + u = c
 
 	return 0;
 }
