@@ -22,9 +22,9 @@ int main ()
 		std::cout << "u este: " << u << '\n';
 	}
 
-	std::cout << "Precizia masina e: " << u << '\n';
-	// Andy: resulting u is 1.4013e-45 (before correction)
-	// Ama: u = 1e-08
+	std::cout << "Precizia masina e: " << prev_u << '\n';
+	// Andy: resulting u is 1.4013e-45
+	// Ama: u = 1e-07
 
 	return 0;
 }
