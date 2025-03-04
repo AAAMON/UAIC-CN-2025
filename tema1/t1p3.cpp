@@ -83,7 +83,7 @@ void calculeaza_polinoame_si_scrie_top3(std::ofstream& file, double victim)
     };
     std::sort(polinoamee.begin(), polinoamee.end());
     
-    file << victim << ' ' << polinoamee[0].second << ' ' << polinoamee[1].second << ' ' << polinoamee[2].second
+    file << victim << '-' << polinoamee[0].second << ' ' << polinoamee[1].second << ' ' << polinoamee[2].second
     << ' ' << polinoamee[3].second << ' ' << polinoamee[4].second << '\n';
 }
 
