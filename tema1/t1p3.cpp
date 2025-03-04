@@ -7,6 +7,7 @@
 #include <fstream>
 // pt sort
 #include <algorithm>
+#include <chrono>
 
 std::ofstream file("t1p3_output.txt");
 // constants:
@@ -57,17 +58,21 @@ void calculeaza_polinoame_si_scrie_top3(std::ofstream& file, double victim)
     << ' ' << polinoamee[3].second << ' ' << polinoamee[4].second << '\n';
 }
 
+
+
+
+
 int main ()
 {
+
     // scriem top 3 polinoame pt fiecare nr intr-un fisier bc it's like 30k...
-    
     if (!file)
     {
         std::cerr << "Nu se deschide fisierul bruh\n";
 	    return 1;
     }
 
-    const int NUMBERS_COUNT = 100;
+    const int NUMBERS_COUNT = 10000;
     // Pe romaneste, daca dai print la numar o sa fie aprox. intre -1.57 si 1.57
     const double LOWER_BOUND = -M_PI / 2; 
     const double UPPER_BOUND = M_PI / 2;
@@ -79,6 +84,8 @@ int main ()
 
     double current_victim;
 
+    using namespace std::chrono;
+    auto start = high_resolution_clock::now();
     // MAIN LOOP
     for (int i = 1; i <= NUMBERS_COUNT; ++i)
     {
@@ -87,6 +94,10 @@ int main ()
         std::cout << "#" << i << ": Number: " << current_victim << '\n';
         calculeaza_polinoame_si_scrie_top3(file, current_victim);
     }
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(end - start).count();
+
+    std::cout << "Toata nebunia pentru " << NUMBERS_COUNT << " iteratii a durat: " << duration << "ms\n";
 
     // citim datele din fisier si facem o ierarhie
 
