@@ -6,13 +6,22 @@
 int main ()
 {
 	// we took this value from the previous exercise (see file t1p1.cpp)
-	float u = 1e-08;
+	double u = 1e-15; // ((1 + u) != 1) AND ((1 + u/10) == 1) are true
 
-	float x = 1.0;
-	float y = u/10.0;
-	float z = u/10.0;
+	double x = 1.0;
+	double y = u/10; // 1e-16
+	double z = u/10; // 1e-16
 
 	std::cout << "Relatia (x + y) + z != x + (y + z) este evaluata ca: " << ((x + y) + z != x + (y + z)) << '\n';
+    // (x + y) + z = 1
+    // x + (y + z) > 1
+
+    double a = 1e15;
+    double b = 1e-15; // same value as u, because of c
+    // a * b = 1 (aprox.)
+    double c = 1 + u; // should be = 1
+
+    std::cout << "Relatia (a * b) * c != a * (b * c) este evaluata ca: " << ((a * b) * c != a * (b * c)) << '\n';
 
 	return 0;
 }
