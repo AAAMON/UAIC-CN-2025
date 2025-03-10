@@ -23,7 +23,6 @@ int main ()
 	}
 
 	std::cout << "Precizia masina e: " << prev_u << '\n';
-	// Andy: resulting u is 1.4013e-45 (originally)
 	// Ama: u = 1e-15
 
 	return 0;

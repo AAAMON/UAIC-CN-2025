@@ -53,6 +53,8 @@ void calculeaza_polinoame_si_scrie_top3(std::ofstream &file, double victim)
             {std::abs(P7 - correct_val), "7"},
             {std::abs(P8 - correct_val), "8"},
         };
+
+    std::cout << P8 - correct_val << '\n';
     std::sort(polinoamee.begin(), polinoamee.end());
 
     file << victim << '-' << polinoamee[0].second << ' ' << polinoamee[1].second << ' ' << polinoamee[2].second
