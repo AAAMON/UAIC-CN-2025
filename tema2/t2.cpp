@@ -22,6 +22,7 @@ void descompunereLU(vector<vector<double>>& A, vector<double>& dU, int n, double
 
         for (int i = p; i < n; ++i) {
             // scadem ccturi
+            // don't worry about it ok it works
             for (int z = 0; z < p; ++z) {
                 A[i][p] -= A[i][z]*A[z][p];
             }
