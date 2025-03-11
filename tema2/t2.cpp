@@ -5,6 +5,18 @@
 
 using namespace std;
 
+bool abortt = 0;
+
+
+bool isZero(double x, double epsilon) {
+    if (abs(x) <= epsilon)
+    {
+        cerr << "Error! " << x << " is almost 0 (zero), cannot divide by " << x << '\n';
+        return 1;
+    }
+    return 0;
+}
+
 void descompunereLU(vector<vector<double>>& A, vector<double>& dU, int n, double epsilon) {
     
     // PAS 1 - Descompunere LU
@@ -27,7 +39,12 @@ void descompunereLU(vector<vector<double>>& A, vector<double>& dU, int n, double
                 A[i][p] -= A[i][z]*A[z][p];
             }
             // TODO: la toate impartirile sa verificam ca nu e 0 folosing epsilon
-            A[i][p] /= dU[p];
+            if (!isZero(dU[p], epsilon))
+                A[i][p] /= dU[p];
+            else {
+                abortt = true;
+                return;
+            }
         }
 
         // U
@@ -38,7 +55,12 @@ void descompunereLU(vector<vector<double>>& A, vector<double>& dU, int n, double
                 A[p][i] -= A[p][z]*A[z][i];
             }
             // TODO: la toate impartirile sa verificam ca nu e 0 folosing epsilon
-            A[p][i] /= A[p][p];
+            if (!isZero(A[p][p], epsilon))
+                A[p][i] /= A[p][p];
+            else {
+                abortt = true;
+                return;
+            }
         }
     }
 
@@ -71,6 +93,9 @@ double calculDeterminant(vector<vector<double>>& A, vector<double>& dU, int n, d
 void run(vector<vector<double>>& A, vector<double>& dU, int n, double epsilon)
 {
     descompunereLU(A, dU, n, epsilon);
+    if (abortt == true) {
+        return;
+    }
     double detA = calculDeterminant(A, dU, n, epsilon);
 }
 
