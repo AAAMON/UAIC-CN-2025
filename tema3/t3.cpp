@@ -6,6 +6,8 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <cmath> // For abs() to check convergence
+#include <limits> // For the max value used in checking convergence
 
 using namespace std;
 
@@ -103,6 +105,7 @@ vector<double> readVector(const string& fileName) {
 //////////////////////////////////////////////////////////////////////////
 // 2 /////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
+
 // Compressed Sparse Row (CSR) representation for sparse matrices
 struct SparseMatrixCSR {
     int n;  // Dimension of the matrix
@@ -182,6 +185,49 @@ SparseMatrixCSR readMatrixCSR(const string& fileName) {
     return matrix;
 }
 
+//////////////////////////////////////////////////////////////////////////
+// 3 /////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+// Gauss-Seidel Method for solving Ax = b
+void gaussSeidel(const SparseMatrix& A, vector<double>& x, const vector<double>& b, int maxIter = 1000, double tol = 1e-6) {
+    int n = A.n;
+    vector<double> x_old(n, 0.0); // Initial guess (starting with 0 for all variables)
+    
+    for (int iter = 0; iter < maxIter; ++iter) {
+        for (int i = 0; i < n; ++i) {
+            double sum = 0.0;
+            
+            // Calculate the sum of A_ij * x_j for all j, excluding i
+            for (const auto& element : A.rows[i].elements) {
+                int j = element.first;
+                double value = element.second;
+                if (j != i) {
+                    sum += value * x[j];
+                }
+            }
+            
+            // Calculate the new value for x[i] using the Gauss-Seidel formula
+            x[i] = (b[i] - sum) / A.diagonal[i];
+        }
+        
+        // Check for convergence by comparing the difference between new and old x
+        double maxDiff = 0.0;
+        for (int i = 0; i < n; ++i) {
+            maxDiff = max(maxDiff, abs(x[i] - x_old[i]));
+        }
+
+        if (maxDiff < tol) {
+            cout << "Converged after " << iter + 1 << " iterations.\n";
+            return;
+        }
+
+        // Update x_old with the current x values for the next iteration
+        x_old = x;
+    }
+
+    cout << "Maximum iterations reached. Solution may not have converged.\n";
+}
 
 
 int main() {
@@ -206,6 +252,17 @@ int main() {
             } else {
                 cout << "Matrix _A" << i << "  has no zero on the diagonal." << endl;
             }
+
+            // calculam caca cu Gauss-Seidel
+            vector<double> x(A.n, 0.0); // Initial solution vector (starts with 0)
+            gaussSeidel(A, x, B); // Solve using Gauss-Seidel
+            // Output the result
+            cout << "Solution x = [";
+            for (double val : x) {
+                cout << val << " ";
+            }
+            cout << "]\n";
+
         }
     } catch (const exception& e) {
         cerr << "Error: " << e.what() << endl;
