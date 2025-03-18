@@ -160,7 +160,26 @@ vector<double> substitutieInversa(vector<vector<double>> &A, vector<double> dU, 
     return x;
 }
 
-/* verificarea solutiei prin norma */
+void calculNorma(const vector<vector<double>> &Ainit, vector<double> &xLU, vector<double> &b, int n)
+{
+    double sum = 0.0;
+    for (int i = 0; i < n; i++)
+    {
+        double yi = 0.0;
+        for (int j = 0; j < n; j++)
+        {
+            yi += Ainit[i][j] * xLU[j];
+        }
+        double zi = yi - b[i];
+        // Dacă yi = b[i] pentru fiecare i, atunci zi = 0 și suma rămâne 0, ceea ce duce la norma 0
+        // (xLU este o aproximare a solutiei, dar pentru dimensiuni mici rezultatul este exact)
+        sum += zi * zi;
+    }
+
+    double norm = sqrt(sum);
+
+    cout << "Norm = " << norm << "\n";
+}
 
 /* solutia sistemului + inversa (utilizant biblioteca) */
 
@@ -168,6 +187,8 @@ vector<double> substitutieInversa(vector<vector<double>> &A, vector<double> dU, 
 
 void run(vector<vector<double>> &A, vector<double> &dU, vector<double> &b, int n, double epsilon)
 {
+    const vector<vector<double>> Ainit = A;
+
     descompunereLU(A, dU, n, epsilon);
     if (abortt == true)
     {
@@ -181,6 +202,8 @@ void run(vector<vector<double>> &A, vector<double> &dU, vector<double> &b, int n
     {
         return;
     }
+
+    calculNorma(Ainit, xLU, b, n);
 }
 
 int main()
