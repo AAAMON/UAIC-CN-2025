@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-// #include <Eigen/Dense>
+#include "Eigen/Dense"
 
 using namespace std;
 
@@ -178,12 +178,42 @@ void calculNorma(const vector<vector<double>> &Ainit, vector<double> &xLU, vecto
 
     double norm = sqrt(sum);
 
-    cout << "Norm = " << norm << "\n";
+    cout << "||Ainit * xLU - b||2 = " << norm << "\n";
 }
 
-/* solutia sistemului + inversa (utilizant biblioteca) */
+void calculEigen(const vector<vector<double>> &Ainit, vector<double> &b, vector<double> xLU, int n)
+{
+    Eigen::MatrixXd Alib(n, n); // matrice de dimensiune arbitrara (n, n), cu valori double
+    Eigen::VectorXd blib(n);
 
-/* ^ afisarea normelor */
+    for (int i = 0; i < n; i++)
+    {
+        blib(i) = b[i];
+        for (int j = 0; j < n; j++)
+        {
+            Alib(i, j) = Ainit[i][j];
+        }
+    }
+
+    Eigen::VectorXd xlib = Alib.colPivHouseholderQr().solve(blib); // solutia pentru A*x = b
+    cout << "xlib = " << xlib.transpose() << "\n";
+    Eigen::MatrixXd Alib_inv = Alib.inverse();
+    cout << "A^(-1):\n"
+         << Alib_inv << "\n";
+
+    Eigen::VectorXd xLUlib(n);
+    for (int i = 0; i < n; i++)
+    {
+        xLUlib(i) = xLU[i];
+    }
+
+    double norm1 = (xLUlib - xlib).norm();
+    cout << "||xLU - xlib||2 = " << norm1 << "\n";
+
+    Eigen::VectorXd xalt = Alib_inv * blib;
+    double norm2 = (xLUlib - xalt).norm();
+    cout << "||xLU - Alib_inv * b||2 = " << norm2 << "\n";
+}
 
 void run(vector<vector<double>> &A, vector<double> &dU, vector<double> &b, int n, double epsilon)
 {
@@ -204,6 +234,8 @@ void run(vector<vector<double>> &A, vector<double> &dU, vector<double> &b, int n
     }
 
     calculNorma(Ainit, xLU, b, n);
+
+    calculEigen(Ainit, b, xLU, n);
 }
 
 int main()
