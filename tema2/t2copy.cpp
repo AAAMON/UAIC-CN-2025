@@ -241,45 +241,75 @@ void run(vector<vector<double>> &A, vector<double> &dU, vector<double> &b, int n
 
 int main()
 {
-    int n;
-    double epsilon;
+    int n = 100;
+    double epsilon = 1e-10;
 
-    // Open the file for reading
-    ifstream inputFile("input.txt");
+    // Randomly seed the random number generator
+    srand(time(0));
 
-    if (!inputFile.is_open()) {
-        cerr << "Failed to open file." << endl;
+    // Create a 100x100 sparse matrix (mostly zeros, with random values on the diagonal and some random off-diagonal values)
+    vector<vector<double>> A(n, vector<double>(n, 0));  // Initialize a 100x100 matrix with zeros
+
+    // Fill the diagonal with non-zero values
+    for (int i = 0; i < n; i++) {
+        A[i][i] = (rand() % 100 + 1);  // Assign a random non-zero value to the diagonal
+    }
+
+    // Optionally fill some off-diagonal values to make the matrix sparse
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i != j && rand() % 5 == 0) {  // Add non-zero elements with a certain probability
+                A[i][j] = rand() % 10 + 1;  // Random off-diagonal value
+            }
+        }
+    }
+
+    // Create vector b with random values
+    vector<double> b(n);
+    for (int i = 0; i < n; i++) {
+        b[i] = rand() % 100 + 1;  // Random values for vector b
+    }
+
+    // Create vector dU with ones (or you can customize it)
+    //vector<double> dU(n, 1);  // Initialize vector dU with 1's (you can adjust this if necessary)
+    vector<double> dU(n);
+    for (int i = 0; i < n; i++) {
+        dU[i] = rand() % 100 + 1;  // Random values for vector b
+    }
+
+    // Save to file "input.txt"
+    ofstream outputFile("output.txt");
+    if (!outputFile) {
+        cerr << "Failed to open the file!" << endl;
         return 1;
     }
 
-    // Read n (dimension of the system)
-    inputFile >> n;
+    // Write n and epsilon
+    outputFile << n << endl;
+    outputFile << epsilon << endl;
 
-    // Read epsilon (precision)
-    inputFile >> epsilon;
-
-     // Read matrix A
-     vector<vector<double>> A(n, vector<double>(n));
-     for (int i = 0; i < n; i++) {
-         for (int j = 0; j < n; j++) {
-             inputFile >> A[i][j];
-         }
-     }
- 
-     // Read vector b
-     vector<double> b(n);
-     for (int i = 0; i < n; i++) {
-         inputFile >> b[i];
-     }
-
-     // Read vector dU
-    vector<double> dU(n);
+    // Write matrix A to file
     for (int i = 0; i < n; i++) {
-        inputFile >> dU[i];
+        for (int j = 0; j < n; j++) {
+            outputFile << A[i][j] << " ";
+        }
+        outputFile << endl;
     }
- 
-     // Close the file
-     inputFile.close();
+
+    // Write vector b to file
+    for (int i = 0; i < n; i++) {
+        outputFile << b[i] << " ";
+    }
+    outputFile << endl;
+
+    // Write vector dU to file
+    for (int i = 0; i < n; i++) {
+        outputFile << dU[i] << " ";
+    }
+    outputFile << endl;
+
+    // Close the file
+    outputFile.close();
 
 
     run(A, dU, b, n, epsilon);
