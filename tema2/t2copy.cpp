@@ -330,7 +330,7 @@ void reconstructLU(const vector<double> &L, const vector<double> &U, const vecto
     {
         for (int j = 0; j < n; j++)
         {
-            cout << getL(L, i, j, n) * getU(U, dU, i, j, n) + getU(U, dU, i, j, n) << " ";
+            cout << getL(L, i, j, n) * getU(U, dU, i, j, n) << " ";
         }
         cout << endl;
     }

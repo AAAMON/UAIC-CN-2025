@@ -234,14 +234,16 @@ SparseMatrixCSR readMatrixCSR(const string &fileName)
 // 2 /////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-// Gauss-Seidel Method for solving Ax = b
-void gaussSeidel(const SparseMatrix &A, vector<double> &x, const vector<double> &b, int maxIter = 1000, double tol = 1e-6)
+void gaussSeidel(const SparseMatrix &A, vector<double> &xGS, const vector<double> &b, int maxIter = 1000, double tol = 1e-6)
 {
     int n = A.n;
-    vector<double> x_old(n, 0.0); // Initial guess (starting with 0 for all variables)
 
     for (int iter = 0; iter < maxIter; ++iter)
     {
+        // Save the previous values of xGS to check for convergence later
+        vector<double> x_old = xGS;
+
+        // Loop over each row in the matrix A
         for (int i = 0; i < n; ++i)
         {
             double sum = 0.0;
@@ -253,19 +255,19 @@ void gaussSeidel(const SparseMatrix &A, vector<double> &x, const vector<double> 
                 double value = element.second;
                 if (j != i)
                 {
-                    sum += value * x[j];
+                    sum += value * xGS[j];
                 }
             }
 
-            // Calculate the new value for x[i] using the Gauss-Seidel formula
-            x[i] = (b[i] - sum) / A.diagonal[i];
+            // Calculate the new value for xGS[i] using the Gauss-Seidel formula
+            xGS[i] = (b[i] - sum) / A.diagonal[i];
         }
 
         // Check for convergence by comparing the difference between new and old x
         double maxDiff = 0.0;
         for (int i = 0; i < n; ++i)
         {
-            maxDiff = max(maxDiff, abs(x[i] - x_old[i]));
+            maxDiff = max(maxDiff, abs(xGS[i] - x_old[i]));
         }
 
         if (maxDiff < tol)
@@ -273,13 +275,11 @@ void gaussSeidel(const SparseMatrix &A, vector<double> &x, const vector<double> 
             cout << "Converged after " << iter + 1 << " iterations.\n";
             return;
         }
-
-        // Update x_old with the current x values for the next iteration
-        x_old = x;
     }
 
     cout << "Maximum iterations reached. Solution may not have converged.\n";
 }
+
 
 //////////////////////////////////////////////////////////////////////////
 // 3 /////////////////////////////////////////////////////////////////////
@@ -417,12 +417,12 @@ int main()
                 vector<double> x(A.n, 0.0); // Initial solution vector (starts with 0)
                 gaussSeidel(A, x, B);       // Solve using Gauss-Seidel
                 // Output the result
-                cout << "Solution x = [";
-                for (double val : x)
-                {
-                    cout << val << " ";
-                }
-                cout << "]\n";
+                // cout << "Solution x = [";
+                // for (double val : x)
+                // {
+                //     cout << val << " ";
+                // }
+                // cout << "]\n";
 
                 // Infinity norm
                 double infinityNorm = computeInfinityNorm(A, x, B);
@@ -440,6 +440,7 @@ int main()
             {
                 cout << "Matrix _A" << i << "  has no zero on the diagonal." << endl;
             }
+            cout << "\n\n\n";
         }
 
         normalSum();
