@@ -308,7 +308,7 @@ Matrix liLiMethod2(const Matrix &A, double epsilon, int kmax)
         Matrix product = multiplyMatrices(middle, inner_squared);
 
         // Calculate (1/4) * (I - V(k) * A) * (3I - V(k) * A) * (3I - V(k) * A)
-        Matrix big_product = multiplyMatrixByScalar(product, 1 / 4);
+        Matrix big_product = multiplyMatrixByScalar(product, 1.0 / 4.0);
 
         // Calculate I + (1/4) * (I - V(k) * A) * (3I - V(k) * A) * (3I - V(k) * A)
         Matrix sum = addMatrices(I, big_product);
@@ -584,17 +584,17 @@ int main()
     double normLL2 = matrixNorm(diffLL2);
     cout << "Norm of the difference between exact and approximate (Li & Li 2) inverse: " << normLL2 << endl;
 
-    Matrix B = {{1, 2, 3}, {4, 5, 6}};
-    Matrix pseudoInverse = schultzMethodNonSquare(B, epsilon, kmax);
-    cout << "Pseudo-Inverse of B (Approximated):" << endl;
-    for (int i = 0; i < pseudoInverse.size(); ++i)
-    {
-        for (int j = 0; j < pseudoInverse[0].size(); ++j)
-        {
-            cout << fixed << setprecision(6) << pseudoInverse[i][j] << " ";
-        }
-        cout << endl;
-    }
+    // Matrix B = {{1, 2, 3}, {4, 5, 6}};
+    // Matrix pseudoInverse = schultzMethodNonSquare(B, epsilon, kmax);
+    // cout << "Pseudo-Inverse of B (Approximated):" << endl;
+    // for (int i = 0; i < pseudoInverse.size(); ++i)
+    // {
+    //     for (int j = 0; j < pseudoInverse[0].size(); ++j)
+    //     {
+    //         cout << fixed << setprecision(6) << pseudoInverse[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
 
     return 0;
 }
