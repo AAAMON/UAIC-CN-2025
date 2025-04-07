@@ -313,88 +313,6 @@ double computeInfinityNorm(const SparseMatrix &A, const vector<double> &x, const
     return maxNorm;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// BONUS /////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-
-void normalSum(double epsilon = 1e-6)
-{
-    SparseMatrix A = readMatrix("data/a.txt");
-    SparseMatrix B = readMatrix("data/b.txt");
-    SparseMatrix AplusB = readMatrix("data/aplusb.txt");
-
-    SparseMatrix result;
-    result.n = A.n;
-    result.diagonal.resize(A.n, 0.0);
-    result.rows.resize(A.n);
-
-    // Sum diagonal elements
-    for (int i = 0; i < A.n; ++i)
-    {
-        result.diagonal[i] = A.diagonal[i] + B.diagonal[i];
-    }
-
-    // Sum non-diagonal elements
-    for (int i = 0; i < A.n; ++i)
-    {
-        map<int, double> summedElements; // (column index, summed value)
-
-        // Add A's values
-        for (const auto &elem : A.rows[i].elements)
-        {
-            summedElements[elem.first] += elem.second;
-        }
-
-        // Add B's values
-        for (const auto &elem : B.rows[i].elements)
-        {
-            summedElements[elem.first] += elem.second;
-        }
-
-        // Convert map back to vector
-        for (const auto &elem : summedElements)
-        {
-            result.rows[i].elements.push_back({elem.first, elem.second});
-        }
-    }
-
-    // Check if result matches AplusB within epsilon
-    bool isEqual = true;
-
-    for (int i = 0; i < A.n; ++i)
-    {
-        if (fabs(result.diagonal[i] - AplusB.diagonal[i]) >= epsilon)
-        {
-            isEqual = false;
-            break;
-        }
-
-        if (result.rows[i].elements.size() != AplusB.rows[i].elements.size())
-        {
-            isEqual = false;
-            break;
-        }
-
-        for (int j = 0; j < result.rows[i].elements.size(); ++j)
-        {
-            if (fabs(result.rows[i].elements[j].second - AplusB.rows[i].elements[j].second) >= epsilon)
-            {
-                isEqual = false;
-                break;
-            }
-        }
-    }
-
-    cout << "Normal sum check: " << (isEqual ? "Success!" : "Mismatch!") << endl;
-}
-
-void csrSum(double epsilon = 1e-6)
-{
-    SparseMatrixCSR A = readMatrixCSR("data/a.txt");
-    SparseMatrixCSR B = readMatrixCSR("data/b.txt");
-    SparseMatrixCSR AplusB = readMatrixCSR("data/aplusb.txt");
-}
-
 int main()
 {
     try
@@ -442,8 +360,6 @@ int main()
             }
             cout << "\n\n\n";
         }
-
-        normalSum();
     }
     catch (const exception &e)
     {
