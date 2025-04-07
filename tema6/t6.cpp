@@ -135,6 +135,17 @@ void interpolateTrig(int m, double x_bar)
     cout << "Total error: " << total_err << endl;
 }
 
+
+// Enter x0, xn (x0 < xn): 0
+// 6.28
+// Enter number of points (n): 20
+// Enter polynomial degree (m < 6): 4
+// Enter x_bar (point to approximate): 1.5
+
+
+
+
+
 int main()
 {
     int n, m;
