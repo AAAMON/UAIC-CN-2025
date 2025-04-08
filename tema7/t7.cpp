@@ -2,7 +2,6 @@
 #include <vector>
 #include <cmath> // pentru fabs()
 #include <fstream>
-#include <cstdlib> // pentru rand()
 #include <random>
 using namespace std;
 
