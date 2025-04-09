@@ -203,7 +203,7 @@ Matrix schultzMethod(const Matrix &A, double epsilon, int kmax)
     return V1; // Return the approximate inverse
 }
 
-Matrix liLiMethod1(const Matrix &A, double epsilon, int kmax)
+Matrix liMethod1(const Matrix &A, double epsilon, int kmax)
 {
     int n = A.size();
     Matrix V0 = initializeV0(A);
@@ -251,13 +251,13 @@ Matrix liLiMethod1(const Matrix &A, double epsilon, int kmax)
 
         if (k > kmax)
         {
-            cout << "Exceeded maximum iterations (Li & Li 1)." << endl;
+            cout << "Exceeded maximum iterations (Li 1)." << endl;
             break;
         }
 
     } while (deltaV >= epsilon); // Convergence condition
 
-    cout << "Iterations (Li & Li 1): " << k << endl;
+    cout << "Iterations (Li 1): " << k << endl;
 
     Matrix A_Ainv = multiplyMatrices(A, V1);
     Matrix I(n, vector<double>(n, 0));
@@ -267,12 +267,12 @@ Matrix liLiMethod1(const Matrix &A, double epsilon, int kmax)
     }
     Matrix diff = subtractMatrices(A_Ainv, I);
     double normFinal = matrixNorm(diff);
-    cout << "Convergence Norm (Li & Li 1): " << normFinal << endl;
+    cout << "Convergence Norm (Li 1): " << normFinal << endl;
 
     return V1;
 }
 
-Matrix liLiMethod2(const Matrix &A, double epsilon, int kmax)
+Matrix liMethod2(const Matrix &A, double epsilon, int kmax)
 {
     int n = A.size();
     Matrix V0 = initializeV0(A);
@@ -326,13 +326,13 @@ Matrix liLiMethod2(const Matrix &A, double epsilon, int kmax)
 
         if (k > kmax)
         {
-            cout << "Exceeded maximum iterations (Li & Li 2)." << endl;
+            cout << "Exceeded maximum iterations (Li 2)." << endl;
             break;
         }
 
     } while (deltaV >= epsilon); // Convergence condition
 
-    cout << "Iterations (Li & Li 2): " << k << endl;
+    cout << "Iterations (Li 2): " << k << endl;
 
     Matrix A_Ainv = multiplyMatrices(A, V1);
     Matrix I(n, vector<double>(n, 0));
@@ -342,7 +342,7 @@ Matrix liLiMethod2(const Matrix &A, double epsilon, int kmax)
     }
     Matrix diff = subtractMatrices(A_Ainv, I);
     double normFinal = matrixNorm(diff);
-    cout << "Convergence Norm (Li & Li 2): " << normFinal << endl;
+    cout << "Convergence Norm (Li 2): " << normFinal << endl;
 
     return V1;
 }
@@ -398,11 +398,11 @@ int main()
     // Apply Schultz's method to approximate the inverse
     Matrix approxInverseS = schultzMethod(A, epsilon, kmax);
 
-    // Apply Li and Li's first method to approximate the inverse
-    Matrix approxInverseLL1 = liLiMethod1(A, epsilon, kmax);
+    // Apply Li's first method to approximate the inverse
+    Matrix approxInverseL1 = liMethod1(A, epsilon, kmax);
 
-    // Apply Li and Li's second method to approximate the inverse
-    Matrix approxInverseLL2 = liLiMethod2(A, epsilon, kmax);
+    // Apply Li's second method to approximate the inverse
+    Matrix approxInverseL2 = liMethod2(A, epsilon, kmax);
 
     // Calculate the exact inverse
     Matrix exactInv = exactInverse(A);
@@ -430,23 +430,23 @@ int main()
     }
 
     // Output the approximate inverse
-    cout << "Approximate Inverse (Li and Li's first Method):" << endl;
+    cout << "Approximate Inverse (Li's first Method):" << endl;
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < n; ++j)
         {
-            cout << fixed << setprecision(6) << approxInverseLL1[i][j] << " ";
+            cout << fixed << setprecision(6) << approxInverseL1[i][j] << " ";
         }
         cout << endl;
     }
 
     // Output the approximate inverse
-    cout << "Approximate Inverse (Li and Li's second Method):" << endl;
+    cout << "Approximate Inverse (Li's second Method):" << endl;
     for (int i = 0; i < n; ++i)
     {
         for (int j = 0; j < n; ++j)
         {
-            cout << fixed << setprecision(6) << approxInverseLL2[i][j] << " ";
+            cout << fixed << setprecision(6) << approxInverseL2[i][j] << " ";
         }
         cout << endl;
     }
@@ -456,13 +456,13 @@ int main()
     double normS = matrixNorm(diffS);
     cout << "Norm of the difference between exact and approximate (Schultz) inverse: " << normS << endl;
 
-    Matrix diffLL1 = subtractMatrices(exactInv, approxInverseLL1);
-    double normLL1 = matrixNorm(diffLL1);
-    cout << "Norm of the difference between exact and approximate (Li & Li 1) inverse: " << normLL1 << endl;
+    Matrix diffL1 = subtractMatrices(exactInv, approxInverseL1);
+    double normL1 = matrixNorm(diffL1);
+    cout << "Norm of the difference between exact and approximate (Li 1) inverse: " << normL1 << endl;
 
-    Matrix diffLL2 = subtractMatrices(exactInv, approxInverseLL2);
-    double normLL2 = matrixNorm(diffLL2);
-    cout << "Norm of the difference between exact and approximate (Li & Li 2) inverse: " << normLL2 << endl;
+    Matrix diffL2 = subtractMatrices(exactInv, approxInverseL2);
+    double normL2 = matrixNorm(diffL2);
+    cout << "Norm of the difference between exact and approximate (Li 2) inverse: " << normL2 << endl;
 
     return 0;
 }
