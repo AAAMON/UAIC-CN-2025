@@ -23,6 +23,13 @@ double F(const std::vector<double> &x)
     // ^ aceasta gaseste solutia doar cu backtracking = false (intr-un numar mare de pasi)
 
     return x[0] * x[0] * x[1] - 2 * x[0] * x[1] * x[1] + 3 * x[0] * x[1] + 4; // F4
+
+    // return -log(1 + exp(x[0] - x[1])) + x[0] + x[1] - log(1 + exp(x[0] + x[1]));
+}
+
+double sigma(double z)
+{
+    return 1 / (1 + exp(-z));
 }
 
 // Gradient analitic al functiei de test
@@ -32,6 +39,8 @@ std::vector<double> gradientAnalitic(const std::vector<double> &x)
     // return {6 * x[0] - 12, 4 * x[1] + 16}; // F2
     // return {2 * x[0] - 4 * x[1], -4 * x[0] + 10 * x[1] - 4}; // F3
     return {2 * x[0] * x[1] - 2 * x[1] * x[1] + 3 * x[1], x[0] * x[0] - 4 * x[0] * x[1] + 3 * x[0]}; // F4
+
+    // return {-sigma(x[0] - x[1]) + sigma(-x[0] - x[1]), sigma(x[0] - x[1]) + sigma(-x[0] - x[1])};
 }
 
 // Gradient numeric cu formula aproximativa data
